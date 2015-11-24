@@ -31,11 +31,7 @@ public class ManejadorLogin {
         
         System.out.println(user);
         System.out.println(domain);
-        if((usrName.equals("oscar")) && (pass.equals("hola"))){
-            return true;
-        } else {
-            return false;
-        }
+        return usrName.equals("oscar") && pass.equals("hola");
     }
     /*public void btnLogin() {
         System.out.println("Hola!!!");

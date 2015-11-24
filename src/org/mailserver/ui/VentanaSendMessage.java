@@ -3,7 +3,7 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-package ui;
+package org.mailserver.ui;
 
 import java.awt.GridLayout;
 import java.awt.event.ActionEvent;
@@ -14,6 +14,7 @@ import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.JTextArea;
 import javax.swing.JTextField;
+import org.mailserver.handlers.ManejadorSendMessage;
 
 /**
  *
@@ -33,7 +34,7 @@ public class VentanaSendMessage extends JFrame {
     JTextArea txtMessage;
     JLabel lblTittle;
     JButton btnSend;
-    
+    ManejadorSendMessage manejadorSendMessage = ManejadorSendMessage.getInstancia();
     public VentanaSendMessage(){
         panel1 = new JPanel();
         panel2 = new JPanel();
@@ -73,16 +74,12 @@ public class VentanaSendMessage extends JFrame {
         setLocationRelativeTo(null);
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         
-        ManejadorVentanaSendMessage manejador = new ManejadorVentanaSendMessage();
-        btnSend.addActionListener(manejador);
-    }
-    
-    public class ManejadorVentanaSendMessage implements ActionListener{
+        btnSend.addActionListener(new ActionListener() {
+ 
+        public void actionPerformed(ActionEvent e){
+        manejadorSendMessage.sendMessage(txtEmail.getText(), txtSubject.getText(), txtMessage.getText());
+        } 
 
-        @Override
-        public void actionPerformed(ActionEvent ae) {
-            handlers.ManejadorSendMessage.getINSTANCE().sendMessage(txtEmail.getText(), txtSubject.getText(), txtMessage.getText());
-        }
-        
+        });
     }
 }

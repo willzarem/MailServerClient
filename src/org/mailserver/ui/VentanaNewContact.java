@@ -3,9 +3,8 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-package ui;
+package org.mailserver.ui;
 
-import java.awt.FlowLayout;
 import java.awt.GridLayout;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
@@ -14,6 +13,7 @@ import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.JTextField;
+import org.mailserver.handlers.ManejadorNewContact;
 
 /**
  *
@@ -27,6 +27,7 @@ public class VentanaNewContact extends JFrame{
     JLabel lblContEmail;
     JTextField txtContEmail;
     JButton btnAddContact;
+    ManejadorNewContact manejadorNewContact = ManejadorNewContact.getInstancia();
     
     public VentanaNewContact(){
         panel1 = new JPanel();
@@ -54,17 +55,13 @@ public class VentanaNewContact extends JFrame{
         
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         
-        ManejadorNewContact manejador = new ManejadorNewContact();
-	btnAddContact.addActionListener(manejador);
-    }
-    
-    public class ManejadorNewContact implements ActionListener{
-
-        @Override
-        public void actionPerformed(ActionEvent e) {
-            System.out.println(handlers.ManejadorNewContact.getINSTANCE().obtenerDatos(txtContEmail.getText()));
+        btnAddContact.addActionListener(new ActionListener() {
+ 
+        public void actionPerformed(ActionEvent e){
+            System.out.println(manejadorNewContact.getInstancia().obtenerDatos(txtContEmail.getText()));
             setVisible(false);
-        }
-    
+        } 
+
+        });
     }
 }

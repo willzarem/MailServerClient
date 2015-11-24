@@ -1,4 +1,6 @@
-package main;
+package org.mailserver.main;
+
+import org.mailserver.ui.VentanaLogin;
 
 /*
  * To change this license header, choose License Headers in Project Properties.
@@ -6,8 +8,6 @@ package main;
  * and open the template in the editor.
  */
 
-
-import ui.VentanaLogin;
 
 /**
  *

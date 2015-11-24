@@ -3,15 +3,11 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-package ui;
+package org.mailserver.ui;
 
 import java.awt.GridLayout;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
-import java.io.IOException;
-import java.net.UnknownHostException;
-import java.util.logging.Level;
-import java.util.logging.Logger;
 import javax.swing.JButton;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
@@ -19,6 +15,7 @@ import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.JPasswordField;
 import javax.swing.JTextField;
+import org.mailserver.handlers.ManejadorLogin;
 
 /**
  *
@@ -36,6 +33,8 @@ public class VentanaLogin extends JFrame{
     private JPanel panel2;
     private JPanel panel3;
     private JPanel panel4;
+    
+    ManejadorLogin manejadorLogin = ManejadorLogin.getInstancia();
     
     public VentanaLogin(){
         panel1 = new JPanel();
@@ -76,29 +75,13 @@ public class VentanaLogin extends JFrame{
         setLocationRelativeTo(null);
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         
-        ManejadorLogin manejador = new ManejadorLogin();
-	btnLogin.addActionListener(manejador);
-    }
-    
-    public class ManejadorLogin implements ActionListener{
-
-    @Override
-    public void actionPerformed(ActionEvent ae) {
-        
-        if(ae.getSource() == btnLogin){
-            boolean auth = false;
-            handlers.ManejadorLogin handler;
-            try {
-                handler = handlers.ManejadorLogin.getINSTANCE();
-                auth = (handler.UserAuthentication(txtUsrName.getText(), txtPass.getText()));
-                System.out.println(handler.obtenerDatos(txtUsrName.getText(), txtPass.getText()));
-            } catch (UnknownHostException ex) {
-                Logger.getLogger(VentanaLogin.class.getName()).log(Level.SEVERE, null, ex);
-            } catch (IOException ex) {
-                System.out.println(ex.getMessage());
-            }
-            
-            if(!auth){ 
+        btnLogin.addActionListener(new ActionListener() {
+ 
+        public void actionPerformed(ActionEvent e){
+            if(e.getSource() == btnLogin){
+            boolean auth = (manejadorLogin.UserAuthentication(txtUsrName.getText(), txtPass.getText()));
+            System.out.println(manejadorLogin.obtenerDatos(txtUsrName.getText(), txtPass.getText()));
+            if(!auth){
                 JOptionPane.showMessageDialog(null, "Incorrect Credentials", "ERROR", JOptionPane.ERROR_MESSAGE);
             } else {
                 setVisible(false);
@@ -108,7 +91,7 @@ public class VentanaLogin extends JFrame{
                 menu.setSize(250, 250);
             }
         } 
+
+        }});
     }
-    
-}
 }

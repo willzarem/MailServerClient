@@ -3,7 +3,7 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-package handlers;
+package org.mailserver.handlers;
 
 /**
  *
@@ -11,10 +11,13 @@ package handlers;
  */
 public class ManejadorNewContact {
     
-    private static final ManejadorNewContact INSTANCE = new ManejadorNewContact();
+    private static ManejadorNewContact instancia = new ManejadorNewContact();
 
-    public static ManejadorNewContact getINSTANCE() {
-        return INSTANCE;
+    public static ManejadorNewContact getInstancia() {
+        if(instancia == null){
+            instancia = new ManejadorNewContact();
+        }
+        return instancia;
     }
     
     public String obtenerDatos(String email) {

@@ -3,7 +3,7 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-package handlers;
+package org.mailserver.handlers;
 
 import javax.swing.JOptionPane;
 
@@ -13,10 +13,13 @@ import javax.swing.JOptionPane;
  */
 public class ManejadorSendMessage {
     
-    public static final ManejadorSendMessage INSTANCE = new ManejadorSendMessage();
+    public static ManejadorSendMessage instancia = new ManejadorSendMessage();
     
-    public static ManejadorSendMessage getINSTANCE(){
-        return INSTANCE;
+    public static ManejadorSendMessage getInstancia(){
+        if(instancia == null){
+            instancia = new ManejadorSendMessage();
+        }
+        return instancia;
     }
     
     public void sendMessage(String recipient, String subject, String body){

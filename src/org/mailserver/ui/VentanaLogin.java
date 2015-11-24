@@ -16,6 +16,7 @@ import javax.swing.JPanel;
 import javax.swing.JPasswordField;
 import javax.swing.JTextField;
 import org.mailserver.handlers.ManejadorLogin;
+import org.mailserver.handlers.ServerDomainNotAdded;
 
 /**
  *
@@ -79,7 +80,15 @@ public class VentanaLogin extends JFrame{
  
         public void actionPerformed(ActionEvent e){
             if(e.getSource() == btnLogin){
-            boolean auth = (manejadorLogin.UserAuthentication(txtUsrName.getText(), txtPass.getText()));
+            boolean auth = false ;
+            try {
+                manejadorLogin.UserAuthentication(txtUsrName.getText(), txtPass.getText());
+            } catch (ServerDomainNotAdded ex) {
+                JOptionPane.showMessageDialog(null, "Server unknown: " + ex.getMessage(), "ERROR", JOptionPane.ERROR_MESSAGE);
+            } catch (Exception ex) {
+                JOptionPane.showMessageDialog(null, "Incorrect Credentials", "ERROR", JOptionPane.ERROR_MESSAGE);
+            }
+            
             System.out.println(manejadorLogin.obtenerDatos(txtUsrName.getText(), txtPass.getText()));
             if(!auth){
                 JOptionPane.showMessageDialog(null, "Incorrect Credentials", "ERROR", JOptionPane.ERROR_MESSAGE);

@@ -1,24 +1,26 @@
 package org.mailserver.main;
 
+import java.util.Hashtable;
 import org.mailserver.ui.VentanaLogin;
-
-/*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
- */
-
 
 /**
  *
  * @author Oscar Martinez
  */
 public class MailServerClient {
-
+    
+    public static Hashtable<String, String> SERVERS;
     /**
      * @param args the command line arguments
      */
     public static void main(String[] args) {
+        
+        SERVERS = new Hashtable<>();
+        
+        SERVERS.put("saniin.com", "192.168.0.1");
+        SERVERS.put("galileo.edu", "192.168.0.2");
+        SERVERS.put("hotmail.com", "192.168.0.3");
+        
         final VentanaLogin miVentana = new VentanaLogin();
 
         miVentana.setVisible(true);

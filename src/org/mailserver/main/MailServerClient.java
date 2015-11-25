@@ -23,6 +23,10 @@ public class MailServerClient {
         return serversList.containsKey(domain);
     }
     
+    public static String getServerAddress(String domain) { 
+        return serversList.get(domain);
+    }
+    
     public static void main(String[] args) {
         final VentanaWelcome miVentana = new VentanaWelcome();
         

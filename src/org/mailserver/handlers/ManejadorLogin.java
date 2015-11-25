@@ -5,13 +5,21 @@
  */
 package org.mailserver.handlers;
 
+import java.io.BufferedReader;
+import java.io.InputStreamReader;
+import java.io.PrintWriter;
+import java.net.Socket;
+import java.util.Date;
 import java.util.Scanner;
+import org.mailserver.main.MailServerClient;
 
 /**
  *
  * @author Oscar Martinez
  */
 public class ManejadorLogin {
+    
+    private Socket loginSocket;
     
     //Esto es singleton
     private static ManejadorLogin instancia = new ManejadorLogin();
@@ -23,29 +31,34 @@ public class ManejadorLogin {
         return instancia;
     }
     
-    public boolean UserAuthentication(String usrEmail, String pass){
-        if((usrEmail.equals("oscar@domain.com")) && (pass.equals("hola"))){
-            return true;
-        } else {
-            return false;
-        }
+    private boolean UserAuthentication(String srvResponse){
+        return srvResponse.equals("LOGIN OK");
     }
     
-    public void separateMail(String email, String password){
+    public boolean obtenerDatos(String email, String password) throws Exception {
         Scanner sc = new Scanner(email);
         sc.useDelimiter("@");
-        String user = sc.next();
+        String name = sc.next();
         String domain = sc.next();
+        PrintWriter out;
+        BufferedReader incoming;
+        String response;
         
-        obtenerDatos(user, domain, password);
-    }
-    
-    public void obtenerDatos(String name, String domain, String password) {
+        if (!MailServerClient.serverDomainExists(domain)){
+            throw new Exception("Domain not registered");
+        }
         
+        loginSocket = new Socket(MailServerClient.getServerAddress(domain), 9090);
+        out = new PrintWriter(loginSocket.getOutputStream(), true);
+        incoming = new BufferedReader(new InputStreamReader(loginSocket.getInputStream()));
         
+        out.println("LOGIN " + name + " " + password);        
+        response = incoming.readLine();
         
-        System.out.println("name: " + name);
-        System.out.println("domain: " + domain);
+        System.out.println(name + "@" + domain);
         System.out.println("password: " + password);
+        System.out.println("Response: " + response);
+        
+        return UserAuthentication(response);
     }
 }

@@ -76,23 +76,26 @@ public class VentanaLogin extends JFrame implements ActionListener{
 
     @Override
     public void actionPerformed(ActionEvent ae) {
-        if(ae.getSource() == btnLogin){
-            boolean auth = (manejadorLogin.UserAuthentication(txtUsrName.getText(), txtPass.getText()));
-            manejadorLogin.separateMail(txtUsrName.getText(), txtPass.getText());
-            if(!auth){
-                JOptionPane.showMessageDialog(null, "Incorrect Credentials", "ERROR", JOptionPane.ERROR_MESSAGE);
-            } else {
+        try {
+            if(ae.getSource() == btnLogin){
+                boolean auth = manejadorLogin.obtenerDatos(txtUsrName.getText(), txtPass.getText());
+                if(!auth){
+                    JOptionPane.showMessageDialog(null, "Incorrect Credentials", "ERROR", JOptionPane.ERROR_MESSAGE);
+                } else {
+                    setVisible(false);
+                    VentanaInbox inbox = new VentanaInbox();
+
+                    inbox.setVisible(true);
+                    inbox.setSize(250, 250);
+                }
+            } else if(ae.getSource() == btnBack){
+                VentanaWelcome ventanaWelcome = new VentanaWelcome();
                 setVisible(false);
-                VentanaInbox inbox = new VentanaInbox();
-                
-                inbox.setVisible(true);
-                inbox.setSize(250, 250);
+                ventanaWelcome.setVisible(true);
+                ventanaWelcome.setSize(250, 250);
             }
-        } else if(ae.getSource() == btnBack){
-            VentanaWelcome ventanaWelcome = new VentanaWelcome();
-            setVisible(false);
-            ventanaWelcome.setVisible(true);
-            ventanaWelcome.setSize(250, 250);
+        } catch(Exception ex) {
+            JOptionPane.showMessageDialog(null, "ERROR: " + ex.getMessage(), "ERROR", JOptionPane.ERROR_MESSAGE);
         }
     }
 }

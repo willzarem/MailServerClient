@@ -23,10 +23,9 @@ public class ManejadorSendMessage {
     }
     
     public void sendMessage(String recipient, String subject, String body){
-        System.out.println("MAIL TO " + recipient);
-        System.out.println("MAIL SUBJECT " + subject);
-        System.out.println("MAIL BODY " + body);
-        System.out.println("END SEND MAIL");
+        System.out.println("destinatario: " + recipient);
+        System.out.println("asunto:  " + subject);
+        System.out.println("Mensaje: " + body);
         JOptionPane.showMessageDialog(null, "Message Sent", "SENT", JOptionPane.INFORMATION_MESSAGE);
     }
 }

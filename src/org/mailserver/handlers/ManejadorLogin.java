@@ -6,7 +6,6 @@
 package org.mailserver.handlers;
 
 import java.util.Scanner;
-import org.mailserver.main.MailServerClient;
 
 /**
  *
@@ -15,7 +14,7 @@ import org.mailserver.main.MailServerClient;
 public class ManejadorLogin {
     
     //Esto es singleton
-    private static ManejadorLogin instancia;
+    private static ManejadorLogin instancia = new ManejadorLogin();
 
     public static ManejadorLogin getInstancia() {
         if(instancia == null){
@@ -24,33 +23,29 @@ public class ManejadorLogin {
         return instancia;
     }
     
-    public boolean UserAuthentication(String usrName, String pass) throws ServerDomainNotAdded {
-        Scanner scan = new Scanner(usrName);
-        scan.useDelimiter("@");
-        String user = scan.next();
-        String domain = scan.next();
-        String domainIp = getDomainIP(domain);
-
-        System.out.println(user);
-        System.out.println(domain);
-        System.out.println(domainIp);
-        return (usrName.equals("oscar")) && (pass.equals("hola"));
-    }
-    
-    private String getDomainIP(String domainName) throws ServerDomainNotAdded {
-        String domainIP = "";
-
-        if (MailServerClient.SERVERS.containsKey(domainName)){
-            domainIP =  MailServerClient.SERVERS.get(domainName);
+    public boolean UserAuthentication(String usrEmail, String pass){
+        if((usrEmail.equals("oscar@domain.com")) && (pass.equals("hola"))){
+            return true;
         } else {
-            throw new ServerDomainNotAdded();
+            return false;
         }
-        
-        return domainIP;
     }
     
-    public String obtenerDatos(String name, String password) {
-        String log = "LOGIN " + name + " " + password;
-        return log;
+    public void separateMail(String email, String password){
+        Scanner sc = new Scanner(email);
+        sc.useDelimiter("@");
+        String user = sc.next();
+        String domain = sc.next();
+        
+        obtenerDatos(user, domain, password);
+    }
+    
+    public void obtenerDatos(String name, String domain, String password) {
+        
+        
+        
+        System.out.println("name: " + name);
+        System.out.println("domain: " + domain);
+        System.out.println("password: " + password);
     }
 }

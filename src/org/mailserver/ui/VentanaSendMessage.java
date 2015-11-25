@@ -20,66 +20,69 @@ import org.mailserver.handlers.ManejadorSendMessage;
  *
  * @author Oscar Martinez
  */
-public class VentanaSendMessage extends JFrame {
-    JPanel panel1;
-    JPanel panel2;
-    JPanel panel3;
-    JPanel panel4;
-    JPanel panel5;
-    JLabel lblTo;
-    JLabel lblSubject;
-    JLabel lblMessage;
+public class VentanaSendMessage extends JFrame implements ActionListener{
+    JPanel panelTittle, panelTo, panelSubject, panelMessage, panelButton;
+    JLabel lblTo, lblSubject, lblMessage;
     JTextField txtEmail;
     JTextField txtSubject;
     JTextArea txtMessage;
     JLabel lblTittle;
-    JButton btnSend;
+    JButton btnSend, btnBack;
     ManejadorSendMessage manejadorSendMessage = ManejadorSendMessage.getInstancia();
     public VentanaSendMessage(){
-        panel1 = new JPanel();
-        panel2 = new JPanel();
-        panel3 = new JPanel();
-        panel4 = new JPanel();
-        panel5 = new JPanel();
+        panelTittle = new JPanel();
+        panelTo = new JPanel();
+        panelSubject = new JPanel();
+        panelMessage = new JPanel();
+        panelButton = new JPanel();
         lblTo = new JLabel("To: ");
         lblSubject = new JLabel("Subject: ");
         lblMessage = new JLabel("Message:");
         txtEmail = new JTextField(10);
         txtSubject = new JTextField(10);
-        txtMessage = new JTextArea(10, 20);
+        txtMessage = new JTextArea(1, 1);
         lblTittle = new JLabel("NEW EMAIL");
         btnSend = new JButton("Send");
+        btnBack = new JButton("Back");
         
-        panel1.add(lblTittle);
+        panelTittle.add(lblTittle);
         lblTittle.setFont(new java.awt.Font("Comic Sans", 0, 20));
         
-        panel2.add(lblTo);
-        panel2.add(txtEmail);
+        panelTo.add(lblTo);
+        panelTo.add(txtEmail);
         
-        panel3.add(lblSubject);
-        panel3.add(txtSubject);
+        panelSubject.add(lblSubject);
+        panelSubject.add(txtSubject);
         
-        panel4.add(lblMessage);
-        panel4.add(txtMessage);
+        panelMessage.setLayout(new GridLayout(2, 1));
+        panelMessage.add(lblMessage);
+        panelMessage.add(txtMessage);
         
-        panel5.add(btnSend);
+        panelButton.add(btnBack);
+        panelButton.add(btnSend);
+        btnBack.addActionListener(this);
+        btnSend.addActionListener(this);
         
         setLayout(new GridLayout(5, 1));
-        add(panel1);
-        add(panel2);
-        add(panel3);
-        add(panel4);
-        add(panel5);
+        add(panelTittle);
+        add(panelTo);
+        add(panelSubject);
+        add(panelMessage);
+        add(panelButton);
         
         setLocationRelativeTo(null);
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-        
-        btnSend.addActionListener(new ActionListener() {
- 
-        public void actionPerformed(ActionEvent e){
-        manejadorSendMessage.sendMessage(txtEmail.getText(), txtSubject.getText(), txtMessage.getText());
-        } 
+    }
 
-        });
+    @Override
+    public void actionPerformed(ActionEvent e) {
+        if(e.getSource() == btnBack){
+            VentanaInbox ventanaInbox = new VentanaInbox();
+            setVisible(false);
+            ventanaInbox.setVisible(true);
+            ventanaInbox.setSize(250, 350);
+        } else if(e.getSource() == btnSend){
+            manejadorSendMessage.sendMessage(txtEmail.getText(), txtSubject.getText(), txtMessage.getText());
+        }
     }
 }

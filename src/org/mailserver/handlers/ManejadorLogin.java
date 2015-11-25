@@ -5,7 +5,13 @@
  */
 package org.mailserver.handlers;
 
+import java.io.BufferedReader;
+import java.io.InputStreamReader;
+import java.io.PrintWriter;
+import java.net.Socket;
+import java.util.Date;
 import java.util.Scanner;
+import org.mailserver.main.MailServerClient;
 
 /**
  *
@@ -13,8 +19,10 @@ import java.util.Scanner;
  */
 public class ManejadorLogin {
     
+    private Socket loginSocket;
+    
     //Esto es singleton
-    private static ManejadorLogin instancia;
+    private static ManejadorLogin instancia = new ManejadorLogin();
 
     public static ManejadorLogin getInstancia() {
         if(instancia == null){
@@ -23,23 +31,34 @@ public class ManejadorLogin {
         return instancia;
     }
     
-    public boolean UserAuthentication(String usrName, String pass){
-        Scanner scan = new Scanner(usrName);
-        scan.useDelimiter("@");
-        String user = scan.next();
-        String domain = scan.next();
-        
-        System.out.println(user);
-        System.out.println(domain);
-        return usrName.equals("oscar") && pass.equals("hola");
+    private boolean UserAuthentication(String srvResponse){
+        return srvResponse.equals("LOGIN OK");
     }
-    /*public void btnLogin() {
-        System.out.println("Hola!!!");
-    }*/
     
-    public String obtenerDatos(String name, String password) {
-        String log = "LOGIN " + name + " " + password;
-        System.out.println(log);
-        return log;
+    public boolean obtenerDatos(String email, String password) throws Exception {
+        Scanner sc = new Scanner(email);
+        sc.useDelimiter("@");
+        String name = sc.next();
+        String domain = sc.next();
+        PrintWriter out;
+        BufferedReader incoming;
+        String response;
+        
+        if (!MailServerClient.serverDomainExists(domain)){
+            throw new Exception("Domain not registered");
+        }
+        
+        loginSocket = new Socket(MailServerClient.getServerAddress(domain), 9090);
+        out = new PrintWriter(loginSocket.getOutputStream(), true);
+        incoming = new BufferedReader(new InputStreamReader(loginSocket.getInputStream()));
+        
+        out.println("LOGIN " + name + " " + password);        
+        response = incoming.readLine();
+        
+        System.out.println(name + "@" + domain);
+        System.out.println("password: " + password);
+        System.out.println("Response: " + response);
+        
+        return UserAuthentication(response);
     }
 }

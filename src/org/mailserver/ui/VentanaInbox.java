@@ -15,39 +15,42 @@ import javax.swing.JMenu;
 import javax.swing.JMenuBar;
 import javax.swing.JMenuItem;
 import javax.swing.JPanel;
-import javax.swing.JTextField;
-import org.mailserver.handlers.ManejadorNewContact;
+import javax.swing.JTable;
 
 /**
  *
  * @author omartinez
  */
-public class VentanaNewContact extends JFrame implements ActionListener{
-    private JPanel panelTittle, panelContact, panelButton;
-    private JLabel lblTitle, lblContEmail;
-    private JTextField txtContEmail;
-    private JButton btnAddContact, btnBack;
+public class VentanaInbox extends JFrame implements ActionListener{
     private JMenuBar mb;
     private JMenu menuArchivo, menuEditar;
     private JMenuItem sendEmail, viewEmails, addContact, listContacts;
-    ManejadorNewContact manejadorNewContact = ManejadorNewContact.getInstancia();
+    private JPanel panelTable, panelButton;
+    private JButton back;
+    private JTable tableInbox;
+    private JLabel lblInbox;
     
-    public VentanaNewContact(){
-        panelTittle = new JPanel();
-        panelContact = new JPanel();
-        panelButton = new JPanel();
-        lblContEmail = new JLabel("Contact Email: ");
-        lblTitle = new JLabel("ADD NEW CONTACT");
-        txtContEmail = new JTextField(10);
-        btnAddContact = new JButton("Add Contact");
-        btnBack = new JButton("Back");
-        
+    public VentanaInbox(){
         mb = new JMenuBar();
         setJMenuBar(mb);
         menuArchivo = new JMenu("Archivo");
         mb.add(menuArchivo);
         menuEditar = new JMenu("Editar");
         mb.add(menuEditar);
+        
+        panelTable = new JPanel();
+        panelButton = new JPanel();
+        lblInbox = new JLabel("INBOX");
+        lblInbox.setFont(new java.awt.Font("Comic Sans", 0, 20));
+        tableInbox = new JTable(2, 3);
+        back = new JButton("Back");
+        
+        panelTable.add(lblInbox);
+        panelTable.add(tableInbox);
+        
+        panelButton.add(back);
+        back.addActionListener(this);
+        
         
         sendEmail = new JMenuItem("New Email");
         sendEmail.addActionListener(this);
@@ -65,38 +68,26 @@ public class VentanaNewContact extends JFrame implements ActionListener{
         listContacts.addActionListener(this);
         menuEditar.add(listContacts);
         
-        panelTittle.add(lblTitle);
-        lblTitle.setFont(new java.awt.Font("Comic Sans", 0, 20));
-        
-        panelContact.add(lblContEmail);
-        panelContact.add(txtContEmail);
-        
-        panelButton.add(btnBack);
-        panelButton.add(btnAddContact);
-        
-        setLayout(new GridLayout(3, 1));
-        add(panelTittle);
-        add(panelContact);
+        setLayout(new GridLayout(2, 1));
+        add(panelTable);
         add(panelButton);
         
         setLocationRelativeTo(null);
-        
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-        
-        btnAddContact.addActionListener(this);
-        btnBack.addActionListener(this);
     }
 
     @Override
     public void actionPerformed(ActionEvent e) {
-        if(e.getSource() == btnAddContact){
-            System.out.println(manejadorNewContact.getInstancia().obtenerDatos(txtContEmail.getText()));
+        if(e.getSource() == back){
+            VentanaLogin viewLogin = new VentanaLogin();
             setVisible(false);
-        }else if(e.getSource() == sendEmail){
+            viewLogin.setVisible(true);
+            viewLogin.setSize(250, 250);
+        } else if(e.getSource() == sendEmail){
             setVisible(false);
             VentanaSendMessage sendMessage = new VentanaSendMessage();
             sendMessage.setVisible(true);
-            sendMessage.setSize(250, 350);
+            sendMessage.setSize(350, 400);
         } else if(e.getSource() == viewEmails){
             System.out.println("presiono Ver emails");
         } else if(e.getSource() == addContact){
@@ -105,12 +96,10 @@ public class VentanaNewContact extends JFrame implements ActionListener{
             newContact.setVisible(true);
             newContact.setSize(250 , 250);
         } else if(e.getSource() == listContacts){
-            System.out.println("presiono list contacts");
-        } else if(e.getSource() == btnBack){
-            VentanaInbox inbox = new VentanaInbox();
+            VentanaListContacts ventanaListContacts = new VentanaListContacts();
             setVisible(false);
-            inbox.setVisible(true);
-            inbox.setSize(250, 250);
+            ventanaListContacts.setVisible(true);
+            ventanaListContacts.setSize(250, 250);
         }
     }
 }

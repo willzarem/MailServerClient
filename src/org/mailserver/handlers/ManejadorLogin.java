@@ -9,8 +9,8 @@ import java.io.BufferedReader;
 import java.io.InputStreamReader;
 import java.io.PrintWriter;
 import java.net.Socket;
-import java.util.Date;
 import java.util.Scanner;
+import java.util.regex.Pattern;
 import org.mailserver.main.MailServerClient;
 
 /**
@@ -48,16 +48,28 @@ public class ManejadorLogin {
             throw new Exception("Domain not registered");
         }
         
-        loginSocket = new Socket(MailServerClient.getServerAddress(domain), 9090);
+        loginSocket = new Socket(MailServerClient.getServerAddress(domain), 1400);
         out = new PrintWriter(loginSocket.getOutputStream(), true);
         incoming = new BufferedReader(new InputStreamReader(loginSocket.getInputStream()));
         
-        out.println("LOGIN " + name + " " + password);        
+        System.out.println("LOGIN " + name + " " + password);
+        out.println("LOGIN " + name + " " + password);
         response = incoming.readLine();
         
-        System.out.println(name + "@" + domain);
-        System.out.println("password: " + password);
-        System.out.println("Response: " + response);
+        if (!Pattern.compile("OK LOGIN").matcher(response).matches()) {
+            throw new Exception(response);
+        }
+        
+        System.out.println("CLIST " + name);
+        out.println("CLIST " + name);
+        response = incoming.readLine();
+        
+        if (!Pattern.compile("OK CLIST .*").matcher(response).matches()) {
+            throw new Exception(response);
+        } 
+        
+        MailServerClient.storeContacts(response);
+        
         
         return UserAuthentication(response);
     }

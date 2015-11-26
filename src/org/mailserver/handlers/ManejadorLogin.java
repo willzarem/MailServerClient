@@ -63,12 +63,21 @@ public class ManejadorLogin {
         System.out.println("CLIST " + name);
         out.println("CLIST " + name);
         response = incoming.readLine();
+        System.out.println(response);
         
         if (!Pattern.compile("OK CLIST .*").matcher(response).matches()) {
             throw new Exception(response);
         } 
         
         MailServerClient.storeContacts(response);
+        
+        System.out.println("CLIST " + name);
+        out.println("CLIST " + name);
+        response = incoming.readLine();
+        
+        if (!Pattern.compile("OK CLIST .*").matcher(response).matches()) {
+            throw new Exception(response);
+        } 
         
         
         return UserAuthentication(response);

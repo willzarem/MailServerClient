@@ -39,7 +39,7 @@ public class MailServerClient {
         return contactsList.containsKey(userName);
     }
     
-    public static void storeContacts(String contactsResponse) { 
+    public static void storeContacts(String contactsResponse) throws Exception { 
         System.out.println("contactsResponse: " + contactsResponse);
         
         Scanner scResponse = new Scanner(contactsResponse);
@@ -62,11 +62,17 @@ public class MailServerClient {
                 
                 // Store all contacts
                 contactsList.put(username, email);
+            } else {
+                throw new Exception(contactsResponse);
             }
         }
                 
         System.out.println(contactsList);
     }
+    
+    // New Mail Handling
+    
+    
     
     /**
      * @param args the command line arguments
